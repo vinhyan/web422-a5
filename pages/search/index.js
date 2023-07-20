@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Form, Row, Col, Button, InputGroup } from 'react-bootstrap';
+import { useAtom } from 'jotai';
+import { searchHistoryAtom } from '@/store';
 
 export default function AdvancedSearch() {
   const router = useRouter();
+  const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
 
   const {
     register,
@@ -21,13 +24,16 @@ export default function AdvancedSearch() {
   });
 
   function submitForm(data) {
-    console.log(data);
+    // console.log(data);
 
     const queryString = `${data.searchBy}=true${
       data.geoLocation ? `&geoLocation=${data.geoLocation}` : ''
     }${data.medium ? `&medium=${data.medium}` : ''}&isHighlight=${
       data.isHighlight
     }&isOnView=${data.isOnView}&q=${data.q}`;
+
+    // Add search query to search history
+    setSearchHistory([...searchHistory, queryString]);
 
     // console.log(queryString);
 
