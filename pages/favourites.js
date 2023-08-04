@@ -5,6 +5,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 
 export default function Favourites() {
   const [favouritesList, setFavourtiesList] = useAtom(favouritesAtom);
+  if (!favouritesList) return null;
   return (
     <>
       <Row className="gy-4">

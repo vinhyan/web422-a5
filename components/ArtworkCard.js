@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAtom } from 'jotai';
 import { favouritesAtom } from '@/store';
 import { useState, useEffect } from 'react';
+import { addToFavourites, addToHistory, removeFromFavourites } from '@/lib/userData';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -67,20 +68,22 @@ export function ArtworkCardDetail({ objectID }) {
   );
 
   useEffect(() => {
-    setShowAdded(favouritesList.includes(objectID));
+    setShowAdded(favouritesList?.includes(objectID));
   }, [favouritesList]);
 
-  function favouritesClicked() {
+  async function favouritesClicked() {
     if (showAdded) {
-      setfavouritesList((current) => current.filter((fav) => fav !== objectID));
-      setShowAdded(false);
+      setfavouritesList(await removeFromFavourites(objectID))
+      // setfavouritesList((current) => current.filter((fav) => fav !== objectID));
+      // setShowAdded(false);
     } else {
-      setfavouritesList((current) => [...current, objectID]);
-      setShowAdded(true);
+      setfavouritesList(await addToFavourites(objectID));
+      // setfavouritesList((current) => [...current, objectID]);
+      // setShowAdded(true);
     }
   }
 
-  console.log('favouritesList', favouritesList);
+  // console.log('favouritesList', favouritesList);
 
   if (error) return <Error statusCode={404} />;
   if (isLoading) return <div>Loading...</div>;

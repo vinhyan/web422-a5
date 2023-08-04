@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Form, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import { useAtom } from 'jotai';
 import { searchHistoryAtom } from '@/store';
+import { addToHistory } from '@/lib/userData';
 
 export default function AdvancedSearch() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function AdvancedSearch() {
     },
   });
 
-  function submitForm(data) {
+  async function submitForm(data) {
     // console.log(data);
 
     const queryString = `${data.searchBy}=true${
@@ -33,7 +34,8 @@ export default function AdvancedSearch() {
     }&isOnView=${data.isOnView}&q=${data.q}`;
 
     // Add search query to search history
-    setSearchHistory([...searchHistory, queryString]);
+    // setSearchHistory([...searchHistory, queryString]);
+    setSearchHistory(await addToHistory(queryString));
 
     // console.log(queryString);
 
